@@ -1,20 +1,144 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div class="container">
+  <h1 class="text-center" style="margin: 25px 0">Estudiantes</h1>
+  <div class="row justify-content-end" style="margin: 25px 0">
+    <div class="col-2">
+      <button type="button" class="btn btn-primary btn-block" (click)="openModalRegister(register)">Crear</button>
+    </div>
+  </div>
+  <div class="row" style="margin: 25px 0">
+    <div class="col-12">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Genero</th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Email</th>
+            <th scope="col">Direccion</th>
+            <th scope="col">Más</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let student of students; let indice= index">
+            <th scope="row">{{indice + 1}}</th>
+            <td>{{student.first_name }} {{student.middle_name}} {{student.last_name}}</td>
+            <td>{{student.gender}}</td>
+            <td>
+              <button type="button" class="btn btn-info" (click)="moreDetails(student.student_id)">Ver</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-info" (click)="moreDetails(student.student_id)">Ver</button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-info" [swal]="['Oops!', 'This is not implemented yet :/', 'warning']">Ver</button>
+            </td>
+            <td>
+              <div class="dropdown">
+                <i class="fa fa-ellipsis-v fa-lg" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                  aria-hidden="true"></i>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#">Editar</a>
+                  <a class="dropdown-item" href="#" (click)="removeStudent(student.student_id)">Eliminar</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+<ng-template #register let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Registrar estudiante</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formRegister">
+      <!-- Personal -->
+      <div class="form-row">
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="firstName" placeholder="Primer nombre">
+        </div>
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="middleName" placeholder="Segundo nombre(Opcional)">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="lastName" placeholder="Apellido(s)">
+        </div>
+        <div class="form-group col">
+          <select class="form-control" id="gender" formControlName="gender">
+            <option selected>Selecciona un genero</option>
+            <option>Masculino</option>
+            <option>Femenino</option>
+          </select>
+        </div>
+      </div>
+      <!-- Email -->
+      <label>Email</label>
+      <div class="form-row">
+        <div class="form-group col">          
+          <input type="text" class="form-control" formControlName="email" placeholder="Correo electrónico">
+        </div>
+        <div class="form-group col">
+          <select class="form-control" id="emailType" formControlName="emailType">
+            <option selected>Selecciona el tipo de correo</option>
+            <option>Personal</option>
+            <option>Trabajo</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <!-- Phone -->
+      <label>Teléfono</label>
+      <div class="form-row">
+        <div class="form-group col">
+          <input type="tel" class="form-control" formControlName="phone" placeholder="Teléfono">
+        </div>
+        <div class="form-group col">
+          <select class="form-control" id="phoneType" formControlName="phoneType">
+            <option selected>Selecciona el tipo de teléfono</option>
+            <option>Personal</option>
+            <option>Trabajo</option>
+            <option>Casa</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="countryCode" placeholder="Codigo de pais">
+        </div>
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="areaCode" placeholder="Codigo de área">
+        </div>
+      </div>
+      <!-- Addresses -->
+      <label>Dirección</label>
+      <div class="form-group">
+        <input type="text" class="form-control" formControlName="addressLine" placeholder="Dirección">
+      </div>
+      <div class="form-row">
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="state" placeholder="Estado">
+        </div>
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="city" placeholder="Ciudad">
+        </div>
+        <div class="form-group col">
+          <input type="text" class="form-control" formControlName="zipCode" placeholder="Codigo postal">
+        </div>
+      </div>
+
+    </form>
+  </div>
+  <div class="modal-footer">      
+    <button type="button" class="btn btn-outline-dark btn-block" (click)="registerStudent()">Guardar</button>
+  </div>
+</ng-template>
